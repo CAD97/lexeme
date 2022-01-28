@@ -1,0 +1,38 @@
+error: duplicate attribute
+ --> tests/ui/many_errors_keep_reporting.rs:5:10
+  |
+5 | #[lexeme(crate = wrong)]
+  |          ^^^^^^^^^^^^^
+
+error: expected `crate`
+ --> tests/ui/many_errors_keep_reporting.rs:6:10
+  |
+6 | #[lexeme(krate = wrong)]
+  |          ^^^^^
+
+error: duplicate attribute
+ --> tests/ui/many_errors_keep_reporting.rs:9:14
+  |
+9 |     #[lexeme("[a-zA-Z][a-zA-Z0-9]*")]
+  |              ^^^^^^^^^^^^^^^^^^^^^^
+
+error: expected string literal
+  --> tests/ui/many_errors_keep_reporting.rs:10:14
+   |
+10 |     #[lexeme(this = is::bad)]
+   |              ^^^^
+
+error: regex parse error:
+           a{2,1}
+            ^^^^^
+       error: invalid repetition count range, the start must be <= the end
+ --> tests/ui/many_errors_keep_reporting.rs:8:14
+  |
+8 |     #[lexeme("a{2,1}")]
+  |              ^^^^^^^^
+
+error: lexeme only supports lexing unit enum kinds
+  --> tests/ui/many_errors_keep_reporting.rs:11:10
+   |
+11 |     Ident(),
+   |          ^^

@@ -1,0 +1,5 @@
+error: duplicate attribute
+ --> tests/ui/extra_item_attr.rs:5:10
+  |
+5 | #[lexeme(crate = lexeme)]
+  |          ^^^^^^^^^^^^^^

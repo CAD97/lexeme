@@ -1,0 +1,8 @@
+error: regex parse error:
+           *
+           ^
+       error: repetition operator missing expression
+ --> tests/ui/invalid_variant_attr.rs:5:14
+  |
+5 |     #[lexeme("*")]
+  |              ^^^

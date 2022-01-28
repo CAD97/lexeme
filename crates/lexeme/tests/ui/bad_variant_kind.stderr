@@ -1,0 +1,11 @@
+error: lexeme only supports lexing unit enum kinds
+ --> tests/ui/bad_variant_kind.rs:8:10
+  |
+8 |     Tuple(),
+  |          ^^
+
+error: lexeme only supports lexing unit enum kinds
+  --> tests/ui/bad_variant_kind.rs:10:12
+   |
+10 |     Struct {},
+   |            ^^

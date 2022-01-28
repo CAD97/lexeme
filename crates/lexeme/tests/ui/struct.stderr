@@ -1,0 +1,5 @@
+error: Lexeme derive only works for enums
+ --> tests/ui/struct.rs:4:5
+  |
+4 | pub struct Token;
+  |     ^^^^^^

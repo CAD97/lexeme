@@ -1,0 +1,5 @@
+error: expected `crate`
+ --> tests/ui/bad_item_attr.rs:4:10
+  |
+4 | #[lexeme(unknown)]
+  |          ^^^^^^^
