@@ -42,11 +42,11 @@ pub enum Token {
     #[lexeme(r"\}")]
     BraceClose,
 
-    #[lexeme(r"\+")]
-    OpAddition,
-
     #[lexeme(r"\+\+")]
     OpIncrement,
+
+    #[lexeme(r"\+")]
+    OpAddition,
 
     #[lexeme("===")]
     OpStrictEquality,
