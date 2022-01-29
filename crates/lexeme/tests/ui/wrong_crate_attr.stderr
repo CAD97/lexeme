@@ -32,9 +32,9 @@ error[E0433]: failed to resolve: use of undeclared crate or module `wrong`
   = note: this error originates in the derive macro `Lexeme` (in Nightly builds, run with -Z macro-backtrace for more info)
 help: consider importing one of these items
   |
-1 | use lexeme::Regex;
+1 | use lexeme::RegexSet;
   |
-1 | use regex::Regex;
+1 | use regex::RegexSet;
   |
-1 | use regex::bytes::Regex;
+1 | use regex::bytes::RegexSet;
   |

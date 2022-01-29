@@ -29,27 +29,29 @@ the longer one can be ordered first to get priority.
 Please note; these numbers are for comparison only, and the author is not a
 statistician nor a software benchmarking expert.
 
-These benchmarks show lexeme as two-to-three orders of magnitude slower than
-logos. However, it should be noted that this doesn't make lexeme slow by any
-means (10+ MiB/s is nothing to scoff at!); logos is just ludicrously fast.
+These benchmarks give lexeme a throughput of about 2%-5% the throughput
+of logos for regex-heavy workloads, with up to 64% throughput when literal
+optimizations can carry performance. However, it should be noted that this
+doesn't make lexeme slow by any means (15+ MiB/s is nothing to scoff at!);
+logos is just ludicrously fast.
 
 ```text
-Identifiers/Logos       time:   [446.71 ns 447.32 ns 447.98 ns]
-                        thrpt:  [1.6195 GiB/s 1.6219 GiB/s 1.6241 GiB/s]
-Identifiers/Lexeme      time:   [106.71 us 106.86 us 107.05 us]
-                        thrpt:  [6.9400 MiB/s 6.9521 MiB/s 6.9620 MiB/s]
+Identifiers/Logos       time:   [866.76 ns 868.10 ns 869.58 ns]
+                        thrpt:  [854.34 MiB/s 855.79 MiB/s 857.12 MiB/s]
+Identifiers/Lexeme      time:   [40.459 us 40.494 us 40.534 us]
+                        thrpt:  [18.328 MiB/s 18.346 MiB/s 18.362 MiB/s]
 
 Keywords, Operators, and Punctators/Logos
-                        time:   [1.5550 us 1.5592 us 1.5635 us]
-                        thrpt:  [1.2694 GiB/s 1.2729 GiB/s 1.2763 GiB/s]
+                        time:   [2.5958 us 2.5998 us 2.6041 us]
+                        thrpt:  [780.43 MiB/s 781.71 MiB/s 782.93 MiB/s]
 Keywords, Operators, and Punctators/Lexeme
-                        time:   [28.311 us 28.325 us 28.338 us]
-                        thrpt:  [71.715 MiB/s 71.749 MiB/s 71.784 MiB/s]
+                        time:   [4.0701 us 4.0771 us 4.0860 us]
+                        thrpt:  [497.38 MiB/s 498.46 MiB/s 499.32 MiB/s]
 
-Strings/Logos           time:   [453.70 ns 456.27 ns 458.70 ns]
-                        thrpt:  [1.7684 GiB/s 1.7779 GiB/s 1.7879 GiB/s]
-Strings/Lexeme          time:   [66.062 us 66.107 us 66.152 us]
-                        thrpt:  [12.557 MiB/s 12.565 MiB/s 12.574 MiB/s]
+Strings/Logos           time:   [712.22 ns 713.65 ns 715.32 ns]
+                        thrpt:  [1.1340 GiB/s 1.1367 GiB/s 1.1390 GiB/s]
+Strings/Lexeme          time:   [16.401 us 16.414 us 16.427 us]
+                        thrpt:  [50.567 MiB/s 50.606 MiB/s 50.645 MiB/s]
 ```
 
   [alt]: <https://docs.rs/regex/latest/regex/index.html#composites>

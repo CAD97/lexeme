@@ -60,7 +60,9 @@ fn impl_lexeme_for(input: syn::DeriveInput) -> proc_macro2::TokenStream {
         },
     };
 
-    let mut lexemes = Vec::<(syn::Ident, String)>::with_capacity(variants.len());
+    let mut lexeme_name = vec![];
+    let mut lexeme_regex = vec![];
+
     for variant in variants {
         let mut regex_attrs = variant
             .attrs
@@ -103,52 +105,41 @@ fn impl_lexeme_for(input: syn::DeriveInput) -> proc_macro2::TokenStream {
         if should_skip {
             continue; // skip this lexeme to avoid derived errors, but continue to other lexemes
         } else {
-            lexemes.push((variant.ident, regex));
+            lexeme_name.push(variant.ident);
+            let mut regex = regex;
+            regex.insert_str(0, r"\A");
+            lexeme_regex.push(regex);
         }
     }
 
-    let mut mega_regex = String::from(r"\A(?:");
-    let mut lexeme_ix = Vec::<usize>::with_capacity(lexemes.len());
-    let mut lexeme_variant = Vec::<syn::Ident>::with_capacity(lexemes.len());
-
-    for (ix, (name, regex)) in lexemes.into_iter().enumerate() {
-        use std::fmt::Write;
-        lexeme_ix.push(ix);
-        if ix != 0 {
-            mega_regex.push('|');
-        }
-        write!(mega_regex, "(?P<{name}>{regex})").expect("infallible");
-        lexeme_variant.push(name);
-    }
-    mega_regex.push(')');
+    let lexeme_count = lexeme_regex.len();
+    let lexeme_ix = (0..lexeme_count).collect::<Vec<_>>();
 
     quote! {
         impl #impl_generics #lexeme::Lexeme for #ty #ty_generics #where_clause {
             fn lex(input: &str) -> Option<(Self, usize)> {
-                static REGEX: #lexeme::OnceCell::<#lexeme::Regex> = #lexeme::OnceCell::new();
-                let regex = REGEX
-                    .get_or_try_init(|| #lexeme::Regex::new(#mega_regex))
-                    .expect("lexeme combined regex failed to build");
-                let caps = regex.captures(input)?;
-                if cfg!(debug_assertions) {
-                    let matched_lexemes = caps
-                        .iter()
-                        .skip(1) // whole match
-                        .enumerate()
-                        .flat_map(|(ix, mat)| mat.map(|_| [#(stringify!(#lexeme_variant)),*][ix]))
-                        .collect::<Vec<_>>();
-                    assert!(
-                        matched_lexemes.len() == 1,
-                        "lexeme matched more than one capture group ({:?}); this should not be possible",
-                        matched_lexemes);
-                }
-                #(
-                    if let Some(cap) = caps.get(#lexeme_ix + 1) {
-                        debug_assert_eq!(cap.start(), 0, "lexeme matched not at start");
-                        return Some((Self::#lexeme_variant, cap.end()));
+                static REGEX: #lexeme::OnceCell::<(
+                    #lexeme::RegexSet,
+                    [#lexeme::Regex; #lexeme_count],
+                )> = #lexeme::OnceCell::new();
+
+                let (regex_set, regex) = REGEX
+                    .get_or_try_init(|| Ok::<_, #lexeme::RegexError>((
+                        #lexeme::RegexSet::new(&[#(#lexeme_regex),*])?,
+                        [#(#lexeme::Regex::new(#lexeme_regex)?),*],
+                    )))
+                    .expect("lexeme regex failed to build");
+
+                for ix in regex_set.matches(input) {
+                    let re = &regex[ix];
+                    let mat = re.find(input).unwrap();
+                    return match ix {
+                        #(#lexeme_ix => Some((Self::#lexeme_name, mat.end())),)*
+                        _ => unreachable!()
                     }
-                )*
-                unreachable!()
+                }
+
+                None
             }
         }
     }
